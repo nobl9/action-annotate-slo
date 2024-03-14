@@ -1,0 +1,10 @@
+- apiVersion: n9/v1alpha
+  kind: Annotation
+  metadata:
+    name: $ANNOTATION_NAME
+    project: $PROJECT
+  spec:
+    slo: $SLO_NAME
+    description: "$ANNOTATION_DESCRIPTION"
+    startTime: "$ANNOTATION_TIME"
+    endTime: "$ANNOTATION_TIME"
