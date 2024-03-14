@@ -29,11 +29,9 @@ This action applies a [Nobl9 SLO Annotation](https://docs.nobl9.com/Features/SLO
 name: Nobl9 Annotate SLO GitHub Actions Demo
 on: [push]
 jobs:
-  nobl9:
+  annotate-slos:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
       - uses: nobl9/action-annotate-slo@v0.1.0
         with:
           nobl9_client_id: ${{ secrets.CLIENT_ID }}
@@ -48,11 +46,9 @@ jobs:
 name: Nobl9 Annotate SLO GitHub Actions Demo
 on: [push]
 jobs:
-  nobl9:
+  annotate-slos:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
       - uses: nobl9/action-annotate-slo@v0.1.0
         with:
           nobl9_client_id: ${{ secrets.CLIENT_ID }}
@@ -67,11 +63,9 @@ jobs:
 name: Nobl9 Annotate SLO GitHub Actions Demo
 on: [push]
 jobs:
-  nobl9:
+  annotate-slos:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
       - uses: nobl9/action-annotate-slo@v0.1.0
         with:
           nobl9_client_id: ${{ secrets.CLIENT_ID }}

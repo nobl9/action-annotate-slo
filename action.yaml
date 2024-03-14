@@ -84,7 +84,7 @@ runs:
         SLOCTL_URL: ${{ inputs.nobl9_url }}
       run: |
         exec ${{ github.action_path }}/post-annotations.sh \
-        -p "${{ inputs.project }}" \
-        -a "${{ inputs.annotation }}" \
-        -s "${{ inputs.slo }}" \
-        -l "${{ inputs.labels }}"
+        -p '${{ inputs.project }}' \
+        -a '${{ inputs.annotation }}' \
+        -s '${{ inputs.slo }}' \
+        -l '${{ inputs.labels }}'
