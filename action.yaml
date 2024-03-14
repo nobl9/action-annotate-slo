@@ -35,7 +35,6 @@ inputs:
     description: 'Nobl9 URL'
     required: false
     default: 'https://apps.nobl9.com/api'
-outputs:
 runs:
   using: "composite"
   steps:
@@ -76,11 +75,6 @@ runs:
         mkdir -p ./bin/
         curl -s -o ./bin/yq -L https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_${OS_NAME@L}_${YQ_ARCH}
         chmod +x ./bin/yq
-    - name: Create sloctl context
-      shell: bash
-      id: create-sloctl-context
-      run: |
-        ./bin/sloctl context create --name github --token "${{ secrets.GITHUB_TOKEN }}"
     - name: Annotate SLO
       shell: bash
       id: annotate-slo
