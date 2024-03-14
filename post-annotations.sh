@@ -34,7 +34,7 @@ while getopts ":p:l:s:a:" o; do
 done
 shift $((OPTIND-1))
 
-if [[ -z "${project}" ||  -z "${annotation}" || ( -z "${slo}"  &&  -z "${labels}" ) ]]; then
+if [[ -z "${project}" ||  -z "${annotation}" ]]; then
     usage
 fi
 
@@ -50,8 +50,7 @@ do
   printf "Annotating %s.%s\n" $project $slo_name
 
   timestamp=$(date +%s)
-  timestamp_chars=$($timestamp| wc -c)
-  max_chars=$((ANNOTATION_NAME_MAX_LEN - timestamp_chars))
+  max_chars=$((ANNOTATION_NAME_MAX_LEN - ${#timestamp}))
   annotation_name=$(printf "%.${max_chars}s-%s" "$slo_name" "$timestamp")
 
   cat annotation.yaml.template >> annotations.yaml
@@ -70,7 +69,6 @@ do
 
   batch_size=$((batch_size+1))
 done
-
 
 if [ $((batch_size % ANNOTATIONS_BATCH_SIZE)) -ne 0 ]; then
   ./bin/sloctl apply --no-config-file -f annotations.yaml
