@@ -51,9 +51,8 @@ runs:
         VERSION: ${{ inputs.sloctl_version }}
         OS_NAME: ${{ runner.os }}
       run: |
-        mkdir -p ./bin/
-        curl -s -o ./bin/sloctl -L https://github.com/nobl9/sloctl/releases/download/v${VERSION}/sloctl-${OS_NAME@L}-${VERSION}
-        chmod +x ./bin/sloctl
+        curl -s -o ${{ github.action_path }}/bin/sloctl -L https://github.com/nobl9/sloctl/releases/download/v${VERSION}/sloctl-${OS_NAME@L}-${VERSION}
+        chmod +x ${{ github.action_path }}/bin/sloctl
     - name: Install yq
       shell: bash
       id: install-yq
@@ -72,9 +71,8 @@ runs:
         else
           YQ_ARCH="amd64"
         fi
-        mkdir -p ./bin/
-        curl -s -o ./bin/yq -L https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_${OS_NAME@L}_${YQ_ARCH}
-        chmod +x ./bin/yq
+        curl -s -o ${{ github.action_path }}/bin/yq -L https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_${OS_NAME@L}_${YQ_ARCH}
+        chmod +x ${{ github.action_path }}/bin/yq
     - name: Annotate SLO
       shell: bash
       id: annotate-slo
@@ -85,7 +83,7 @@ runs:
         SLOCTL_OKTA_AUTH_SERVER: ${{ inputs.nobl9_okta_auth_server }}
         SLOCTL_URL: ${{ inputs.nobl9_url }}
       run: |
-        exec ./post-annotations.sh \
+        exec ${{ github.action_path }}/post-annotations.sh \
         -p "${{ inputs.project }}" \
         -a "${{ inputs.annotation }}" \
         -s "${{ inputs.slo }}" \
