@@ -53,17 +53,17 @@ while getopts ":p:l:s:a:" o; do
         p)
             [[ "${OPTARG}"  =~ ^[a-zA-Z0-9-]+$ ]]  \
             && project="${OPTARG}" \
-            || err "Invalid project name: \"$OPTARG\". Must be alphanumeric with dashes."
+            || err "Invalid project name: \"$OPTARG\". Must be alphanumeric with dashes allowed."
             ;;
         l)
-            [[ "${OPTARG}"  =~ ^[a-zA-Z0-9-_]+=([a-zA-Z0-9-_]+)(,{1}?[a-zA-Z0-9-_]+=([a-zA-Z0-9-_]+))*$ ]]  \
+            [[ "${OPTARG}"  =~ ^$|^[a-zA-Z0-9-]+=([a-zA-Z0-9-]+)(,{1}?[a-zA-Z0-9-]+=([a-zA-Z0-9-]+))*$ ]]  \
             && labels="${OPTARG}" \
-            || err "Invalid labels: \"$OPTARG\". Must be comma-separated alphanumeric with dashes in key=value,key2=value2 format. https://docs.nobl9.com/Features/Labels/#requirements-for-labels"
+            || err "Invalid labels: \"$OPTARG\". Must be comma-separated alphanumeric, with dashes or underscores allowed, in the format key=value,key2=value2. https://docs.nobl9.com/Features/Labels/#requirements-for-labels"
             ;;
         s)
-            [[ "${OPTARG}"  =~ ^[a-zA-Z0-9-]+$ ]]  \
+            [[ "${OPTARG}"  =~ ^$|^[a-zA-Z0-9-]+$ ]]  \
             && slo="${OPTARG}" \
-            || err "Invalid SLO name: \"$OPTARG\". Must be alphanumeric with dashes."
+            || err "Invalid SLO name: \"$OPTARG\". Must be alphanumeric with dashes allowed."
             ;;
         a)
             annotation_description=${OPTARG}
