@@ -104,4 +104,4 @@ if [ $((annotated_slos_count % batch_size)) -ne 0 ]; then
   rm -f $manifest_file
 fi
 
-printf "Annotated %s SLOs\n" $annotated_slos_count
+printf "Annotated %s SLOs\n" $((annotated_slos_count-1))
