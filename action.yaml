@@ -1,0 +1,90 @@
+name: 'Annotate Nobl9 SLO'
+description: 'Annotate your Nobl9 SLO in GitHub Action'
+inputs:
+  annotation:
+    description: 'Annotation to add'
+    required: true
+  slo:
+    description: 'SLO to annotate'
+    required: false
+  labels:
+    description: 'Labels to annotate'
+    required: false
+  project:
+    description: 'Project containing SLO to annotate'
+    required: true
+  sloctl_version:
+    description: 'sloctl version to use'
+    required: false
+    default: '0.0.99'
+  nobl9_client_id:
+    description: 'Nobl9 client id'
+    required: true
+  nobl9_client_secret:
+    description: 'Nobl9 client secret'
+    required: true
+  nobl9_okta_org_url:
+    description: 'Nobl9 okta org url'
+    required: false
+    default: 'https://accounts.nobl9.com'
+  nobl9_okta_auth_server:
+    description: 'Nobl9 okta auth server'
+    required: false
+    default: 'auseg9kiegWKEtJZC416'
+  nobl9_url:
+    description: 'Nobl9 URL'
+    required: false
+    default: 'https://app.nobl9.com/api'
+runs:
+  using: "composite"
+  steps:
+    - name: Check Runner OS
+      if: ${{ runner.os != 'Linux' && runner.os != 'macOS' }}
+      shell: bash
+      run: |
+        echo "::error title=⛔ error hint::Support Linux and macOS Only"
+        exit 1
+    - name: Install sloctl
+      shell: bash
+      id: install-sloctl
+      env:
+        VERSION: ${{ inputs.sloctl_version }}
+        OS_NAME: ${{ runner.os }}
+      run: |
+        curl -s -o ${{ github.action_path }}/bin/sloctl -L https://github.com/nobl9/sloctl/releases/download/v${VERSION}/sloctl-${OS_NAME@L}-${VERSION}
+        chmod +x ${{ github.action_path }}/bin/sloctl
+    - name: Install yq
+      shell: bash
+      id: install-yq
+      env:
+        OS_NAME: ${{ runner.os }}
+        OS_ARCH: ${{ runner.arch }}
+      run: |
+        if [ $OS_ARCH = "ARM64" ]; then
+          YQ_ARCH="arm64"
+        elif [ $OS_ARCH = "ARM" ]; then
+          YQ_ARCH="arm"
+        elif [ $OS_ARCH = "X86" ]; then
+          YQ_ARCH="386"
+        elif [ $OS_ARCH = "X64" ]; then
+          YQ_ARCH="amd64"
+        else
+          YQ_ARCH="amd64"
+        fi
+        curl -s -o ${{ github.action_path }}/bin/yq -L https://github.com/mikefarah/yq/releases/download/v4.42.1/yq_${OS_NAME@L}_${YQ_ARCH}
+        chmod +x ${{ github.action_path }}/bin/yq
+    - name: Annotate SLO
+      shell: bash
+      id: annotate-slo
+      env:
+        SLOCTL_CLIENT_ID: ${{ inputs.nobl9_client_id }}
+        SLOCTL_CLIENT_SECRET: ${{ inputs.nobl9_client_secret }}
+        SLOCTL_OKTA_ORG_URL: ${{ inputs.nobl9_okta_org_url }}
+        SLOCTL_OKTA_AUTH_SERVER: ${{ inputs.nobl9_okta_auth_server }}
+        SLOCTL_URL: ${{ inputs.nobl9_url }}
+      run: |
+        exec ${{ github.action_path }}/post-annotations.sh \
+        -p '${{ inputs.project }}' \
+        -a '${{ inputs.annotation }}' \
+        -s '${{ inputs.slo }}' \
+        -l '${{ inputs.labels }}'
