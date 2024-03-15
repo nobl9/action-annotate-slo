@@ -45,7 +45,6 @@ template() {
       .[].spec.description |= envsubst |
       .[].spec.startTime |= envsubst |
       .[].spec.endTime |= envsubst" -i "$output_file"
-
 }
 
 while getopts ":p:l:s:a:" o; do
@@ -56,7 +55,7 @@ while getopts ":p:l:s:a:" o; do
             || err "Invalid project name: \"$OPTARG\". Must be alphanumeric with dashes allowed."
             ;;
         l)
-            [[ "${OPTARG}"  =~ ^$|^[a-zA-Z0-9-]+=([a-zA-Z0-9-]+)(,{1}?[a-zA-Z0-9-]+=([a-zA-Z0-9-]+))*$ ]]  \
+            [[ "${OPTARG}"  =~ ^$|^[a-zA-Z0-9_-]+=([a-zA-Z0-9_-]+)(,{1}?[a-zA-Z0-9_-]+=([a-zA-Z0-9_-]+))*$ ]]  \
             && labels="${OPTARG}" \
             || err "Invalid labels: \"$OPTARG\". Must be comma-separated alphanumeric, with dashes or underscores allowed, in the format key=value,key2=value2. https://docs.nobl9.com/Features/Labels/#requirements-for-labels"
             ;;
